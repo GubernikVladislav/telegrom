@@ -1,6 +1,8 @@
 package ru.cool.telegrom.dao;
 
 import ru.cool.telegrom.dao.model.User;
+import ru.cool.telegrom.model.LoginRequest;
+
 
 /**
  * Интерфейс для работы с БД
@@ -12,4 +14,7 @@ public interface UserDao {
      * @param user данные пользователя
      */
     void saveNewUser(User user);
+    boolean checkLogin(LoginRequest loginRequest);
+
+    void setLoginOkay(LoginRequest loginRequest);
 }

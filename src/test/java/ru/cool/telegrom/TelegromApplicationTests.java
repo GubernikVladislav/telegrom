@@ -15,9 +15,9 @@ class TelegromApplicationTests {
     void saveNewUserTest() {
 
         RegistrationRequest request = new RegistrationRequest();
-        request.setLogin("Test_2");
-        request.setPassword("Test_2");
-        request.setEmail("Test_2@test_2.ru");
+        request.setLogin("Tesla");
+        request.setPassword("Tes652");
+        request.setEmail("Test_2@t67_2.ru");
 
         restTemplate.postForEntity("http://localhost:8080/registration", request, Void.class);
     }

@@ -1,5 +1,6 @@
 package ru.cool.telegrom.service;
 
+import ru.cool.telegrom.model.LoginRequest;
 import ru.cool.telegrom.model.RegistrationRequest;
 
 /**
@@ -11,4 +12,5 @@ public interface UserService {
      * Регистрация нового пользователя
      */
     void registration(RegistrationRequest request);
+    void loginOkay(LoginRequest loginRequest) throws Exception;
 }

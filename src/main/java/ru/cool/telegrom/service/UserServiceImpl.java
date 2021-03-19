@@ -1,13 +1,18 @@
 package ru.cool.telegrom.service;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cool.telegrom.dao.UserDao;
 import ru.cool.telegrom.dao.model.User;
+import ru.cool.telegrom.model.LoginRequest;
 import ru.cool.telegrom.model.RegistrationRequest;
+
+
 
 @Service
 public class UserServiceImpl implements UserService {
+
 
     private final UserDao userDao;
 
@@ -25,4 +30,17 @@ public class UserServiceImpl implements UserService {
 
         userDao.saveNewUser(user);
     }
+
+    @Override
+    public void loginOkay(LoginRequest loginRequest) throws Exception{
+
+            if (userDao.checkLogin(loginRequest)) {
+                userDao.setLoginOkay(loginRequest);
+            }else {
+                throw new Exception("Неверный логин или пароль" );
+            }
+
+    }
+
+
 }
