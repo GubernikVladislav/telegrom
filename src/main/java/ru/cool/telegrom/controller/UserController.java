@@ -22,12 +22,13 @@ public class UserController {
         this.userService = userService;
 
     }
-
     @PostMapping("/registration")
     public void registration(@RequestBody RegistrationRequest request) {
         userService.registration(request);
     }
-    @PostMapping
+
+
+    @PostMapping("/login")
     public void loginOkay(@RequestBody LoginRequest loginRequest) throws Exception {
         userService.loginOkay(loginRequest);
     }

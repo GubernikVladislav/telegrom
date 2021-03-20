@@ -14,7 +14,10 @@ public interface UserDao {
      * @param user данные пользователя
      */
     void saveNewUser(User user);
+    /**
+     * Проверка данных пользователя
+     */
     boolean checkLogin(LoginRequest loginRequest);
-
     void setLoginOkay(LoginRequest loginRequest);
+
 }

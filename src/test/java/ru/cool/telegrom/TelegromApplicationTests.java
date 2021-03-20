@@ -19,7 +19,8 @@ class TelegromApplicationTests {
         request.setPassword("Tes652");
         request.setEmail("Test_2@t67_2.ru");
 
-        restTemplate.postForEntity("http://localhost:8080/registration", request, Void.class);
+        restTemplate.postForEntity("http://localhost:8080/user/login", request, Void.class);
+
     }
 
 }
