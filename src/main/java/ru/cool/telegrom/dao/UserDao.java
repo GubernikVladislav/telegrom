@@ -17,7 +17,16 @@ public interface UserDao {
     /**
      * Проверка данных пользователя
      */
-    boolean checkLogin(LoginRequest loginRequest);
+    boolean checkPassword(LoginRequest loginRequest);
+
+    /**
+     * Проверка, что пользователь залогинен
+     *
+     * @param login логин пользователя
+     * @return true, если пользователь залогинен
+     */
+    boolean isUserLogined(String login);
+
     void setLoginOkay(LoginRequest loginRequest);
 
 }

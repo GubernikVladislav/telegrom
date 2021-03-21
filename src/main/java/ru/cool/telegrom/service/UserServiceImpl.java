@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void loginOkay(LoginRequest loginRequest) throws Exception{
 
-            if (userDao.checkLogin(loginRequest)) {
+            if (userDao.checkPassword(loginRequest)) {
                 userDao.setLoginOkay(loginRequest);
             }else {
                 throw new Exception("Неверный логин или пароль" );

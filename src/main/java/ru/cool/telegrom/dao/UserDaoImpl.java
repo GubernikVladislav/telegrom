@@ -17,6 +17,7 @@ public class UserDaoImpl implements UserDao {
     private final PostgresDataSource dataSource;
 
     private final String NEW_USER_STATEMENT = "INSERT INTO userinfo (LOGIN, PASSWORD, EMAIL) VALUES (?,?,?)";
+    private final String IS_USER_LOGINED = "SELECT UI.* FROM USERINFO UI WHERE UI.LOGIN = ? AND UI.LOGINOKAY = TRUE";
 
     @Autowired
     public UserDaoImpl(PostgresDataSource dataSource) {
@@ -40,17 +41,17 @@ public class UserDaoImpl implements UserDao {
 
 
     @Override
-    public boolean checkLogin(LoginRequest loginRequest) {
+    public boolean checkPassword(LoginRequest loginRequest) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement("SELECT * FROM USERINFO WHERE LOGIN=?")) {
             statement.setString(1, loginRequest.getLogin());
             ResultSet resultSet = statement.executeQuery();
-            while(resultSet.next()) {
+            while (resultSet.next()) {
 
                 String password = resultSet.getString("password");
                 if (password.equals(loginRequest.getPassword())) {
                     return true;
-                }else {
+                } else {
                     return false;
                 }
             }
@@ -62,7 +63,20 @@ public class UserDaoImpl implements UserDao {
         return true;
     }
 
-    public void setLoginOkay(LoginRequest loginRequest){
+    @Override
+    public boolean isUserLogined(String login) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(IS_USER_LOGINED)) {
+            statement.setString(1, login);
+            ResultSet resultSet = statement.executeQuery();
+            return resultSet.next();
+        } catch (Exception e) {
+            LOGGER.error("Ошибка проверки логина пользователя", e);
+        }
+        return false;
+    }
+
+    public void setLoginOkay(LoginRequest loginRequest) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement("UPDATE USERINFO SET LOGINOKAY = true WHERE PASSWORD=? AND LOGIN=?")) {
 
@@ -74,7 +88,6 @@ public class UserDaoImpl implements UserDao {
             LOGGER.error("Ошибка изменения состояния");
         }
     }
-
 
 
 }

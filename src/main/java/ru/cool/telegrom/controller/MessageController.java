@@ -7,23 +7,23 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import ru.cool.telegrom.dao.model.Message;
 import ru.cool.telegrom.model.ChatRequest;
 import ru.cool.telegrom.service.ChatService;
 
 @RestController
-@RequestMapping(path = "/chat", consumes = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/messages", consumes = MediaType.APPLICATION_JSON_VALUE)
 public class MessageController {
 
     private final ChatService chatService;
-     @Autowired
+
+    @Autowired
     public MessageController(ChatService chatService) {
         this.chatService = chatService;
     }
 
-    @PostMapping
-    public void crateChat(@RequestBody ChatRequest chatRequest){
-
-
-
+    @PostMapping("/send")
+    public void sendMessage(@RequestBody Message message) {
+        chatService.sendMessage(message);
     }
 }

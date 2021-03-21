@@ -1,11 +1,13 @@
 package ru.cool.telegrom.service;
 
-import ru.cool.telegrom.model.ChatRequest;
+import ru.cool.telegrom.dao.model.Message;
 
 public interface ChatService {
 
-    void createChat(ChatRequest chatRequest);
-
-
-
+    /**
+     * Отправить сообщение
+     *
+     * @param message данные сообщения
+     */
+    void sendMessage(Message message);
 }
