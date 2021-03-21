@@ -4,10 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cool.telegrom.dao.model.Message;
 
-import java.sql.Array;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 @Service
 public class ChatDaoImpl implements ChatDao {
@@ -25,7 +22,7 @@ public class ChatDaoImpl implements ChatDao {
     }
 
     @Override
-    public void createChatIfNotExists(Message message) {
+    public int createChatIfNotExists(Message message) {
         try (Connection connection = dataSource.getConnection();
              PreparedStatement statement = connection.prepareStatement(CHECK_CHAT_EXISTS)) {
             statement.setString(1, message.getFrom());
@@ -34,15 +31,37 @@ public class ChatDaoImpl implements ChatDao {
 
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) {
-                createChat(message);
+               int chat_id = createChat(message);
+
+                return chat_id;
             }
 
         } catch (Exception e) {
 
         }
+        return 0;
     }
 
-    private void createChat(Message message) {
+    private final String NEW_MASSAGE = "Insert into chat (type,admin) values (?, (select ui.id from userinfo ui where ui.login = ?))";
 
+    private int createChat(Message message) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(NEW_MASSAGE, Statement.RETURN_GENERATED_KEYS)) {
+
+            statement.setString(1, "Private");
+            statement.setString(2, message.getFrom());
+            statement.executeUpdate();
+
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                int сhat_id = rs.getInt(1);
+                return сhat_id;
+            }
+            statement.execute();
+        } catch (Exception e) {
+
+        }
+        return 0;
     }
+
 }

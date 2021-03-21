@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.cool.telegrom.dao.model.Message;
-import ru.cool.telegrom.model.ChatRequest;
 import ru.cool.telegrom.service.ChatService;
 
 @RestController

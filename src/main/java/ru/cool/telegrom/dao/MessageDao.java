@@ -1,16 +1,12 @@
 package ru.cool.telegrom.dao;
 
-import ru.cool.telegrom.model.ChatRequest;
+import ru.cool.telegrom.dao.model.Message;
 
 /**
- * Интерфейс для работы с БД
+ * интерфейс для сообщений
  */
+
 public interface MessageDao {
 
-    /**
-     * СОздание нового чата
-     * для общения между залогинеными пользоветелями
-     */
-    void createChat(ChatRequest chatRequest);
-    boolean loginOkay();
+    void saveSendMessage(Message message,int chat_id);
 }

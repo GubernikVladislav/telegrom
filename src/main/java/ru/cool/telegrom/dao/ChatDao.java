@@ -12,5 +12,5 @@ public interface ChatDao {
      *
      * @param message данные нового сообщения
      */
-    void createChatIfNotExists(Message message);
+    int createChatIfNotExists(Message message);
 }

@@ -1,23 +1,23 @@
 package ru.cool.telegrom.dao;
 
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import ru.cool.telegrom.model.ChatRequest;
+import org.springframework.stereotype.Service;
+import ru.cool.telegrom.dao.model.Message;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 
+@Service
+public class MessageDaoImpl implements MessageDao{
 
-@Component
-public class MessageDaoImpl implements MessageDao {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(MessageDaoImpl.class);
 
     private final PostgresDataSource dataSource;
+
+    private final String SEND_MESSAGE= "INSERT INTO MESSAGES (MESSAGE_TEXT) VALUES(?,(" +
+            "SELECT ID FROM CHAT U JOIN MESSAGES UI " +
+            "ON U.ID = UI.CHAT_ID WHERE ID = ?))";
+
 
     @Autowired
     public MessageDaoImpl(PostgresDataSource dataSource) {
@@ -25,36 +25,21 @@ public class MessageDaoImpl implements MessageDao {
     }
 
     @Override
-    public void createChat(ChatRequest chatRequest) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "INSERT INTO CHAT (ADMIN,TYPE) VALUES (?,?)")) {
+    public void saveSendMessage(Message message, int chat_id) {
+        try (Connection conection = dataSource.getConnection();
+             PreparedStatement statement = conection.prepareStatement(SEND_MESSAGE)) {
 
-            statement.setInt(1, chatRequest.getAdmin());
-            statement.setString(2, chatRequest.getType());
+            statement.setString(1, message.getText());
+            statement.setInt(2,chat_id);
 
             statement.execute();
-        } catch (SQLException throwables) {
-            LOGGER.error("Ошибка создания чата");
+        } catch (Exception e){
+
+
         }
 
+
+
+
     }
-
-    @Override
-    public boolean loginOkay() {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(
-                     "Select * from userinfo ui\n" +
-                             "join user_chat uc on uc.user_id = ui.id\n" +
-                             "join chat c on c.id = uc.chat_id\n" +
-                             "WHERE LOGINOKAY = TRUE ")) {
-
-        } catch (SQLException throwables) {
-            LOGGER.error("");
-        }
-
-        return true;
-    }
-
-
 }
