@@ -15,7 +15,7 @@ public class PostgresDataSource {
 
     public Connection getConnection() {
         try {
-            return DriverManager.getConnection("jdbc:postgresql://localhost:5443/postgres", "postgres", "1234");
+            return DriverManager.getConnection("jdbc:postgresql://localhost:5432/postgres", "postgres", "forcgt");
         } catch (SQLException throwables) {
             LOGGER.error("Ошибка подключения к БД");
         }

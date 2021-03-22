@@ -1,5 +1,7 @@
 package ru.cool.telegrom.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cool.telegrom.dao.model.Message;
@@ -9,12 +11,14 @@ import java.sql.*;
 @Service
 public class ChatDaoImpl implements ChatDao {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ChatDaoImpl.class);
+
     private final PostgresDataSource dataSource;
 
     private final String CHECK_CHAT_EXISTS = "SELECT * FROM CHAT C" +
-            "JOIN USER_CHAT UC ON UC.CHAT_ID = C.ID" +
-            "JOIN USERINFO U ON U.ID = UC.USER_ID" +
-            "WHERE U.LOGIN IN (?,?) AND C.ADMIN = (SELECT ID FROM USERINFO WHERE LOGIN = ?)";
+            " JOIN USER_CHAT UC ON UC.CHAT_ID = C.ID" +
+            " JOIN USERINFO U ON U.ID = UC.USER_ID" +
+            " WHERE U.LOGIN IN (?,?) AND C.ADMIN = (SELECT ID FROM USERINFO WHERE LOGIN = ?)";
 
     @Autowired
     public ChatDaoImpl(PostgresDataSource dataSource) {
@@ -37,7 +41,7 @@ public class ChatDaoImpl implements ChatDao {
             }
 
         } catch (Exception e) {
-
+            LOGGER.error("Ошибка добавления нового чата", e);
         }
         return 0;
     }
@@ -59,7 +63,7 @@ public class ChatDaoImpl implements ChatDao {
             }
             statement.execute();
         } catch (Exception e) {
-
+            LOGGER.error("Ошибка создания чата", e);
         }
         return 0;
     }

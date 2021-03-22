@@ -16,7 +16,7 @@ class TelegromApplicationTests {
     void saveSendMessage() {
 
         Message message = new Message();
-        message.setFrom("lexa");
+        message.setFrom("TEST2");
         message.setText("Zdravenki buli");
         message.setTo("Tesla");
 

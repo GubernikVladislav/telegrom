@@ -1,6 +1,8 @@
 package ru.cool.telegrom.dao;
 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.cool.telegrom.dao.model.Message;
@@ -11,13 +13,10 @@ import java.sql.PreparedStatement;
 @Service
 public class MessageDaoImpl implements MessageDao{
 
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageDaoImpl.class);
     private final PostgresDataSource dataSource;
 
-    private final String SEND_MESSAGE= "INSERT INTO MESSAGES (MESSAGE_TEXT) VALUES(?,(" +
-            "SELECT ID FROM CHAT U JOIN MESSAGES UI " +
-            "ON U.ID = UI.CHAT_ID WHERE ID = ?))";
-
+    private final String SEND_MESSAGE= "INSERT INTO MESSAGES (MESSAGE_TEXT, CHAT_ID) VALUES(?,?)";
 
     @Autowired
     public MessageDaoImpl(PostgresDataSource dataSource) {
@@ -34,12 +33,7 @@ public class MessageDaoImpl implements MessageDao{
 
             statement.execute();
         } catch (Exception e){
-
-
+            LOGGER.error("Ошибка записи сообщения", e);
         }
-
-
-
-
     }
 }
