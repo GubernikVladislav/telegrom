@@ -16,9 +16,9 @@ class TelegromApplicationTests {
     void saveSendMessage() {
 
         Message message = new Message();
-        message.setFrom("TEST2");
-        message.setText("Zdravenki buli");
-        message.setTo("Tesla");
+        message.setFrom("Tesla");
+        message.setText("аззазазаsldl");
+        message.setTo("lexa");
 
         restTemplate.postForEntity("http://localhost:8080/messages/send", message, Void.class);
 

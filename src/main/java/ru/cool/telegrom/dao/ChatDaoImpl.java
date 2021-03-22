@@ -35,7 +35,9 @@ public class ChatDaoImpl implements ChatDao {
 
             ResultSet resultSet = statement.executeQuery();
             if (!resultSet.next()) {
-               int chat_id = createChat(message);
+                int chat_id = createChat(message);
+
+                setChatUser(message, chat_id);
 
                 return chat_id;
             }
@@ -67,5 +69,22 @@ public class ChatDaoImpl implements ChatDao {
         }
         return 0;
     }
+
+    private final String SET_USER_CHAT = "INSERT INTO USER_CHAT (CHAT_ID,USER_ID) " +
+            " VALUES (?,(SELECT ID FROM USERINFO WHERE LOGIN = ?))";
+
+    private void setChatUser(Message message, int chat) {
+        try (Connection connection = dataSource.getConnection();
+             PreparedStatement statement = connection.prepareStatement(SET_USER_CHAT)) {
+
+            statement.setInt(1, chat);
+            statement.setString(2, message.getFrom());
+
+            statement.execute();
+        } catch (SQLException throwables) {
+            LOGGER.error("неудачное создание чата");
+        }
+    }
+
 
 }
